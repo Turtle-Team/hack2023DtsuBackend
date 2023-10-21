@@ -1,8 +1,15 @@
+import typing
 from unittest import TestCase
 
 
 class TestDb(TestCase):
-    def test_select_sub_group(self):
+    def test_select_quiz_all(self):
         import database.handler
-        print(database.handler.Db().select_sub_group('TESTGROUP'))
-        self.assertIs(True is True, True)
+        all_quiz = database.handler.Db().select_quiz_all()
+        self.assertIs(type(all_quiz), list)
+
+    def test_select_answer_all(self):
+        import database.handler
+        all_quiz = database.handler.Db().select_answer_all()
+        self.assertIs(type(all_quiz), list)
+

@@ -6,6 +6,7 @@ import unittest
 
 class Test(unittest.TestCase):
 
-    def test_take_list_group_prepods(self):
-        x = database.processor.DataProcessor.take_units()
+    def test_get_all_quiz(self):
+        x = database.processor.DataProcessor().get_all_quiz()
+        print(x)
         return self.assertIsInstance(x, str)

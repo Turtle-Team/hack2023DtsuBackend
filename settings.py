@@ -1,4 +1,4 @@
-DATABASE = {'password': '', 'login': 'root', 'ip': '127.0.0.1', 'basename': 'myapps'}
+DATABASE = {'password': '', 'login': 'root', 'ip': '192.168.1.92', 'basename': 'beeskn'}
 
 FLASK_IP = "localhost"
 # FLASK_IP = "0.0.0.0"
