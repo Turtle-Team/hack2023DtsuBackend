@@ -61,6 +61,18 @@ class Db:
         result = self.cursor.fetchall()
         return result
 
+    def insert_new_answer(self, login: int, quiz_id: int):
+        query = "INSERT INTO `user_answer`(`login`, `quiz_to`, `is_complete`) VALUES (%s,%s,%s)"
+        self.cursor.execute(query, (login, quiz_id, True))
+        result = self.cursor.fetchall()
+        return result
+
+    def select_user_answer(self, user: str):
+        query = "SELECT * FROM `user_answer` WHERE login = %s   "
+        self.cursor.execute(query, (user, ))
+        result = self.cursor.fetchall()
+        return result
+
     def __del__(self):
         self.connection.commit()
         self.cursor.close()
