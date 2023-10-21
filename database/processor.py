@@ -4,49 +4,19 @@ import typing
 import database.handler
 import database.obj
 
-from swagger.quiz.route import Questions
-
 class DataProcessor:
     def __init__(self):
         self.handler = database.handler.Db()
-    def get_all_quiz(self):
+    def get_quiz_all(self):
         alL_quiz_list = self.handler.select_quiz_all()
         convert_list_quiz: typing.List[database.obj.Quiz] = []
         for i in alL_quiz_list:
-            convert_list_quiz.append(database.obj.Quiz(i[0], i[1]))
-        print(convert_list_quiz)
+            answer_this_quiz = self.handler.select_answer_by_quiz_id(i[0])
+            answer_list: typing.List[database.obj.Quiz.answers] = []
+            for j in answer_this_quiz:
+                answer_list.append(database.obj.Answer(j[0], j[2], j[3]))
+            convert_list_quiz.append(database.obj.Quiz(i[0], i[1], answer_list))
+        return convert_list_quiz
 
     def __del__(self):
         del self.handler
-
-    class DbExecution:
-        def __init__(self, questions):
-            self.Questions = Questions
-
-        def get_quiz_data(self):
-            data = []
-            current_quiz = None
-
-            results = self.Questions.questions()
-
-            for row in results:
-                quiz_id, quiz_name, answer_id, answer_name, is_answer = row
-
-                if not current_quiz or current_quiz['quiz_id'] != quiz_id:
-                    if current_quiz:
-                        data.append(current_quiz)
-                    current_quiz = {'quiz_id': quiz_id, 'quiz_name': quiz_name, 'answers': []}
-
-                current_quiz['answers'].append({
-                    'answer_id': answer_id,
-                    'answer_name': answer_name,
-                    'is_answer': bool(is_answer)
-                })
-
-            if current_quiz:
-                data.append(current_quiz)
-
-            return json.dumps(data, ensure_ascii=False)
-
-    def __del__(self):
-        del self.Questions

@@ -31,8 +31,12 @@ class Db:
             return False
 
 
-    #это определенные квизы, но он выдает сразу все в виде кортежей
-    # поэтому надо делать в обработче конвертацию под питоновский формат
+    def select_quiz_by_id(self, quiz_id: int) -> typing.List[typing.Any]:
+        query = "SELECT * FROM quiz WHERE quiz_id = %s"
+        self.cursor.execute(query, (quiz_id,))  # передаем имя квиза как параметр
+        result = self.cursor.fetchall()
+        return result
+
     def select_quiz_by_id(self, quiz_id: int) -> typing.List[typing.Any]:
         query = "SELECT * FROM quiz WHERE quiz_id = %s"
         self.cursor.execute(query, (quiz_id,))  # передаем имя квиза как параметр
@@ -48,6 +52,12 @@ class Db:
     def select_answer_all(self) -> typing.List[typing.Any]:
         query = "SELECT * FROM answer"
         self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        return result
+
+    def select_answer_by_quiz_id(self, quiz_id: int) -> typing.List[typing.Any]:
+        query = "SELECT * FROM answer WHERE id_quiz = %s"
+        self.cursor.execute(query, (quiz_id,))
         result = self.cursor.fetchall()
         return result
 
