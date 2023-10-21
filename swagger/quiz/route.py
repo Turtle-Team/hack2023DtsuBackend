@@ -3,7 +3,7 @@ import mimetypes
 
 import flask
 
-from database.processor import DataProcessor
+import database.handler
 import database.processor
 
 import swagger.quiz.models
@@ -11,25 +11,15 @@ from swagger.quiz.namespace import quiz
 import flask_restplus
 import flask_app
 import swagger.mimetype
-import settings
-import mysql.connector
 
 
-class Questions:
-    def __init__(self):
-        self.connection = mysql.connector.connect(user=settings.DATABASE['login'],
-                                                  host=settings.DATABASE['ip'],
-                                                  database=settings.DATABASE['basename'],
-                                                  password=settings.DATABASE['password'])
-        self.cursor = self.connection.cursor()
+@quiz.route('/get', methods=['GET'])
+class GetQuiz(flask_restplus.Resource):
 
-    def questions(self):
-        query = ("SELECT quiz.id_quiz, quiz.name AS quiz_name, answer.id_answer"
-                 ", answer.name AS answer_name,"
-                 " answer.is_answer FROM quiz INNER JOIN answer ON quiz.quiz_id = answer.id_quiz")
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
-
-    def __del__(self):
-        self.cursor.close()
-        self.connection.close()
+    def get(self):
+        quizis = database.processor.DataProcessor().get_quiz_all()
+        json_quizis = []
+        for i in quizis:
+            json_quizis.append(i.to_json())
+        json_data = json.dumps(json_quizis, ensure_ascii=False)
+        return flask_app.app.response_class(response=json_data, mimetype=swagger.mimetype.APP_JSON)
