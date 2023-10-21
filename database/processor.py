@@ -15,7 +15,7 @@ class DataProcessor:
             answer_list: typing.List[database.obj.Quiz.answers] = []
             for j in answer_this_quiz:
                 answer_list.append(database.obj.Answer(j[0], j[2], j[3]))
-            convert_list_quiz.append(database.obj.Quiz(i[0], i[1], answer_list))
+            convert_list_quiz.append(database.obj.Quiz(i[0], i[1], answer_list, i[2]))
         return convert_list_quiz
 
     def __del__(self):

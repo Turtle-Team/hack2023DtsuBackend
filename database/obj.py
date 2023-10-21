@@ -13,6 +13,7 @@ class Quiz:
     quiz_id: int
     name: str
     answers: typing.List[Answer]
+    teaching_text: str
 
     def to_json(self):
         answers_json = []
@@ -21,5 +22,5 @@ class Quiz:
             answers_json.append(i.__dict__)
 
         self.answers = answers_json
-        return json.dumps(self.__dict__, ensure_ascii=False)
+        return self.__dict__
 
